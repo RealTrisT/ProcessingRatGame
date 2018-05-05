@@ -5,97 +5,76 @@ final int mapWidth = 4;
 final int mapHeight = 4;
 
 final float hexR = 70;           //for radius
-float hexoffs[] = new float[12]; //offsets of the coorners
-float hexSD;                     //for short diagonal
-float hexE;                      //for edge
-float hexT;                      //for tip, the distance from a short diagonal to the nearest, non-touching vertice
+
+hexagon hex = new hexagon(hexR, 30, true);
+
 
 void mapInit(){
-  hexagonFillArray_Vertical(hexR, hexoffs);
-  hexSD = hexagonShortDiagonal(hexR);
-  hexE  = hexagonEdge(hexR);
-  hexT  = hexE/2;
-  println("hexDiameter: " + hexR*2);
-  println("hexSD: " + hexSD);
-  println("hexE : " + hexE);
-  println("hexT : " + hexT);
+  hex.ShortDiagonal = hexagonShortDiagonal(hexR);
+  hex.Edge  = hexagonEdge(hexR);
+  hex.TrianH  = hex.Edge/2;
 }
 
 void mapDraw(){
   for(int i = 0; i < int(float(mapHeight)/2+0.5)*mapWidth; i++){
-    hexagonDraw(
-        mapstartX+       hexSD*(i%mapWidth)
+    hex.Draw(
+        mapstartX+       hex.ShortDiagonal*(i%mapWidth)
       , 
-        mapstartY+       (i/mapWidth)*(hexE+hexR*2)
-      , 
-        hexoffs
+        mapstartY+       (i/mapWidth)*(hex.Edge+hexR*2)
     );
   }
   for(int i = 0; i < mapHeight/2*mapWidth; i++){
-    hexagonDraw(
-      mapstartX+hexSD/2+        hexSD*(i%mapWidth)
+    hex.Draw(
+      mapstartX+hex.ShortDiagonal/2+        hex.ShortDiagonal*(i%mapWidth)
      , 
-      mapstartY+hexE/2+hexR+    (i/mapWidth)*(hexE+hexR*2)
-     , 
-      hexoffs
+      mapstartY+hex.Edge/2+hexR+            (i/mapWidth)*(hex.Edge+hexR*2)
     );
   }
 }
 
-int mapGet(float x, float y){
+coord mapGet(float x, float y){
   int resulty, resultx;
   float starty = mapstartY - hexR;
-  float startx = mapstartX - hexSD/2;
+  float startx = mapstartX - hex.ShortDiagonal/2;
   float mousex = (x - startx);
   float mousey = (y - starty);
   
-  float solov = mousex%hexSD;  //so it's as if it's only one
+  float solov = mousex%hex.ShortDiagonal;  //so it's as if it's only one
   
   float thatconst = 0.57735026918962576450914878050196;
-  //println(mousey);
-  //println("map relative: (" + mousex + ", " + mousey + ")");
   
-  resulty = int((mousey)/(hexE+hexT)); //get the raw squares
-  //println(resulty);
-  //println(solov);
+  resulty = int((mousey)/(hex.Edge+hex.TrianH)); //get the raw squares
+  
+  float height_;
   if(resulty%2 == 1){ //odd
-    if(solov < (hexSD/2)){  //"growing" (downward)
-        float height_;
-        height_ = solov*(thatconst);
-        height_ += (float(resulty))*(hexE+hexT);
-        //println(height_ + "  -  " + mousey);
-        //println(height_);
-        //println(((height_ > mousey)?"ABOVE":"BELLOW"));
-        resulty -= int(height_ > mousey);
+    if(solov < (hex.ShortDiagonal/2)){  //"growing" (downward)
+        height_ = solov*(thatconst)
+                  +(float(resulty))*(hex.Edge+hex.TrianH);
     }else{                  //not
-        float height_;
-        height_ = (solov-hexSD/2)*(-thatconst) + hexT;
-        height_ += (float(resulty))*(hexE+hexT);
-        //println(height_ + "  -  " + mousey);
-        //println(height_);
-        //println(((height_ > mousey)?"ABOVE":"BELLOW"));
-        resulty -= int(height_ > mousey);
+        height_ = (solov-hex.ShortDiagonal/2)*(-thatconst) + hex.TrianH
+                  + (float(resulty))*(hex.Edge+hex.TrianH);
     }
-  }else{
-    if(solov < (hexSD/2)){  //"growing" (downward)
-        float height_;
-        height_ = (solov-hexSD/2)*(-thatconst);
-        height_ += /*starty + */(float(resulty))*(hexE+hexT);
-        //println(height_ + "  -  " + mousey);
-        //println(height_);
-        //println(((height_ > mousey)?"ABOVE":"BELLOW"));
-        resulty -= int(height_ > mousey);
+  }else{  //even
+    if(solov < (hex.ShortDiagonal/2)){  //"growing" (downward)
+        height_ = (solov-hex.ShortDiagonal/2)*(-thatconst)
+                  +(float(resulty))*(hex.Edge+hex.TrianH);
     }else{                  //not
-        float height_;
-        height_ = solov*(thatconst) - hexT;
-        height_ += /*starty + */(float(resulty))*(hexE+hexT);
-        //println(height_ + "  -  " + mousey);
-        //println(height_);
-        //println(((height_ > mousey)?"ABOVE":"BELLOW"));
-        resulty -= int(height_ > mousey);
+        height_ = solov*(thatconst) - hex.TrianH
+                  + (float(resulty))*(hex.Edge+hex.TrianH);
     }
   }
-  
-  //println(resulty);  
-  return resulty;
+  resulty -= int(height_ > mousey);
+ 
+         //shit fucking language won't even cast an int properly fucking niggers
+  resultx = floor((mousex - ((resulty%2==1)?(hex.ShortDiagonal/2):(0)))/hex.ShortDiagonal);  
+
+  coord returnal = new coord();
+  if(resultx < 0 || resultx >= mapWidth || resulty < 0 || resulty >= mapHeight){
+    returnal.x = -1;
+    returnal.y = -1;
+  }else{
+    returnal.x = resultx;
+    returnal.y = resulty;
+  }
+  return returnal;
 }

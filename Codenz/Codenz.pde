@@ -1,6 +1,7 @@
 final int myWidth = 800;   //width of the window
 final int myHeight = 600;  //height of the window
 
+PlayingField pf;
 
 void setup(){
   mapInit();
@@ -15,5 +16,6 @@ void draw() {  //called every frame
 }
 
 void mouseMoved(){
-  /*println(*/mapGet(mouseX, mouseY);/*);*/
+  coord nigger = mapGet(mouseX, mouseY);
+  println(nigger.x, nigger.y);
 }
