@@ -4,7 +4,7 @@ final int myHeight = 600;  //height of the window
 PlayingField pf;
 
 void setup(){
-  mapInit();
+  pf = new PlayingField(11, 11, 50, 50, 25);
 }
 
 void settings() {
@@ -12,10 +12,11 @@ void settings() {
 }
 
 void draw() {  //called every frame
-  mapDraw();  
+  pf.map.mapDraw();
+  pf.drawPoints_Debug();
 }
 
 void mouseMoved(){
-  coord nigger = mapGet(mouseX, mouseY);
+  coord nigger = pf.map.mapGet(mouseX, mouseY);
   println(nigger.x, nigger.y);
 }
