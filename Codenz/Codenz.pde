@@ -43,24 +43,24 @@ void mouseMoved(){
 }
 
 void mouseClicked(){
-  /*if(hover.x != -1 && hover.y != -1 && !hover.equals(player.coord)){
-    boolean currhex = !pf.markedHexagons[hover.x][hover.y]; 
-    pf.markedHexagons[hover.x][hover.y] = currhex;
-    fill((currhex)?color(255, 0, 0):127);
-    pf.map.drawSingle(hover.x, hover.y);
-  }*/
+  if(hover.valid_both() && !hover.equals(player.coord)){
+    pf.markedHexagons[hover.x][hover.y] ^= pf.HEX_BLOCKED;
+    pf.drawSingle(hover.x, hover.y);
+  }
 }
 
 void keyPressed(){
-  /*player.walkingUpdateState(key, false);
+  player.walkingUpdateState(key, false);
   Coord nextStp = player.walkingGetNextLocation();
-  if(!pf.markedHexagons[nextStp.x][nextStp.y]){
-    fill((hover.equals(player.coord))?127:255);
-    pf.map.drawSingle(player.coord.x, player.coord.y);
+  if((pf.markedHexagons[nextStp.x][nextStp.y]&pf.HEX_BLOCKED) == 0){
+    if(!nextStp.equals(player.coord)){
+      pf.markedHexagons[player.coord.x][player.coord.y] &= ~pf.HEX_PLAYERD;
+      pf.drawSingle(player.coord.x, player.coord.y);
+    }
     player.walkingMove();
-    fill(color(104, 8, 142));
-    pf.map.drawSingle(player.coord.x, player.coord.y);
-  }*/
+    pf.markedHexagons[player.coord.x][player.coord.y] |= pf.HEX_PLAYERD;
+    pf.drawSingle(player.coord.x, player.coord.y);
+  }
 }
 
 void keyReleased(){
