@@ -18,6 +18,8 @@ void setup(){
   background(0);
   fill(color(255, 255, 255));
   pf.map.drawAll();
+  pf.markedHexagons[0][0] |= pf.HEX_PLAYERD;
+  pf.drawSingle(0, 0);
 }
 
 void settings() {
