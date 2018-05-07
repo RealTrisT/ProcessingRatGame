@@ -8,7 +8,7 @@ class Map{
   int w, h;
   hexagon hex;
 
-  void mapDraw(){
+  void draw(){
     fill(color(255, 255, 255));
     for(int i = 0; i < int(float(h)/2+0.5)*w; i++){
       hex.Draw(
@@ -26,7 +26,7 @@ class Map{
     }
   }
   
-  coord mapGet(float x, float y){
+  Coord coords(float x, float y){
     int resulty, resultx;
     float efstarty = starty - hex.radius;
     float efstartx = startx - hex.ShortDiagonal/2;
@@ -62,7 +62,7 @@ class Map{
            //shit fucking language won't even cast an int properly fucking niggers
     resultx = floor((mousex - ((resulty%2==1)?(hex.ShortDiagonal/2):(0)))/hex.ShortDiagonal);  
   
-    coord returnal = new coord();
+    Coord returnal = new Coord();
     if(resultx < 0 || resultx >= w || resulty < 0 || resulty >= h){
       returnal.x = -1;
       returnal.y = -1;
