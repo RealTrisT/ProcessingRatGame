@@ -9,6 +9,20 @@ class Coord{
     x = other.x;
     y = other.y;
   }
+  Coord set(Coord other){
+    x = other.x;
+    y = other.y;
+    return this;
+  }
+  boolean equals(Coord other){
+    return x == other.x && y == other.y;
+  }
+  boolean valid_both(){
+    return (x != -1 && y != -1);
+  }
+  boolean valid_either(){
+    return x != -1 || y != -1;
+  }
   int x, y;
 }
 
@@ -22,6 +36,14 @@ class Coordf{
   public Coordf(Coordf other){ //copy constructor
     x = other.x;
     y = other.y;
+  }
+  Coordf set(Coordf other){
+    x = other.x;
+    y = other.y;
+    return this;
+  }
+  boolean equals(Coordf other){
+    return x == other.x && y == other.y;
   }
   float x, y;
 }

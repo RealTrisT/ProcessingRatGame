@@ -4,12 +4,24 @@ class Map{
     hex = new hexagon(hexrad, 30, true); //change that hardcoded 30
   }
   
-  float startx, starty;
-  int w, h;
-  hexagon hex;
-
-  void draw(){
-    fill(color(255, 255, 255));
+  void drawSingle(int x, int y){
+    if(y%2 == 0){ //even
+      hex.Draw(
+          startx+       hex.ShortDiagonal*x
+        ,
+          starty+       y*(hex.Edge/2+hex.radius)
+      );
+    }else{  //odd
+      hex.Draw(
+          startx+hex.ShortDiagonal/2+        hex.ShortDiagonal*x
+         ,
+          starty+                            y*(hex.Edge/2+hex.radius)
+      );
+    }
+  }
+  
+  void drawAll(){
+    //draw even
     for(int i = 0; i < int(float(h)/2+0.5)*w; i++){
       hex.Draw(
           startx+       hex.ShortDiagonal*(i%w)
@@ -17,11 +29,12 @@ class Map{
           starty+       (i/w)*(hex.Edge+hex.radius*2)
       );
     }
+    //draw odd
     for(int i = 0; i < h/2*w; i++){
       hex.Draw(
         startx+hex.ShortDiagonal/2+        hex.ShortDiagonal*(i%w)
        , 
-        starty+hex.Edge/2+hex.radius+            (i/w)*(hex.Edge+hex.radius*2)
+        starty+hex.Edge/2+hex.radius+      (i/w)*(hex.Edge+hex.radius*2)
       );
     }
   }
@@ -72,4 +85,8 @@ class Map{
     }
     return returnal;
   }
+  
+  float startx, starty;
+  int w, h;
+  hexagon hex;
 }
