@@ -12,14 +12,14 @@ void setup(){
   player.walkingSetBorders(0, 0, 10, 10);
   player.canMove = true;
   
-  player.coord.x = 0;
-  player.coord.y = 0;
+  player.coord.x = 5;
+  player.coord.y = 5;
   
   background(0);
   fill(color(255, 255, 255));
   pf.map.drawAll();
-  pf.markedHexagons[0][0] |= pf.HEX_PLAYERD;
-  pf.drawSingle(0, 0);
+  pf.markedHexagons[5][5] |= pf.HEX_PLAYERD;
+  pf.drawSingle(5, 5);
 }
 
 void settings() {
@@ -45,9 +45,32 @@ void mouseMoved(){
 }
 
 void mouseClicked(){
+  if(!player.canMove)
+    return;
   if(hover.valid_both() && !hover.equals(player.coord)){
+    //SET DENSITY
+    player.path.setDensityBlockHex(hover.x, hover.y);
+    
+    //Draw Clicked
     pf.markedHexagons[hover.x][hover.y] ^= pf.HEX_BLOCKED;
     pf.drawSingle(hover.x, hover.y);
+    
+    
+    Coord olderPos = player.moveNextLocation();                      //return older location
+    if(player.isWinner()){
+      player.canMove = false;
+      return;
+    }
+    //Draw New Hex
+    pf.markedHexagons[player.coord.x][player.coord.y] |= pf.HEX_PLAYERD;
+    pf.drawSingle(player.coord.x, player.coord.y);
+      
+    //ReDraw Older hex
+    pf.markedHexagons[olderPos.x][olderPos.y] &= ~pf.HEX_PLAYERD;
+    pf.drawSingle(olderPos.x, olderPos.y);
+    
+    if(player.isLoser())
+      player.canMove = false;
   }
 }
 

@@ -26,6 +26,14 @@ class HexagonMovement{
     down = other.down;
   }
   
+  //For Move Type
+  public final int NONE = -1;
+  public final int UP_RIGHT = 0;
+  public final int UP_LEFT = 1;
+  public final int DOWN_RIGHT = 2;
+  public final int DOWN_LEFT = 3;
+  public final int SIDE_RIGHT = 4;
+  public final int SIDE_LEFT = 5;
   
   private int maxleft, maxright, maxtop, maxbottom;
   private boolean right, left, up, down;
@@ -56,28 +64,54 @@ class HexagonMovement{
   //key_ - key that was pressed
   //coord - coord to change
   //doesn't matter if the coords are inverted, since we're just checking if they're not equal to the borders
-  void move(Coord coord_){
+  void move_key(Coord coord_){
     if(left){               //--------------LEFT----------------
-          if(up){  //if moving up
-            coord_.x -= (coord_.y%2 == 0)?1:0;
-            coord_.y--;
-          }else if(down){ //if moving down
-            coord_.x -= (coord_.y%2 == 0)?1:0;
-            coord_.y++;
-          }else{  //if moving to the sides
-            coord_.x--;
-          }
+          if(up)  //if moving up
+            move(coord_, UP_LEFT);
+          else if(down) //if moving down
+            move(coord_, DOWN_LEFT);
+          else  //if moving to the sides
+            move(coord_, SIDE_LEFT);
+          
     }else if(right){              //--------------RIGHT----------------
-          if(up){    //if moving up
-            coord_.x += (coord_.y%2 == 0)?0:1;
-            coord_.y--;
-          }else if(down){ //if moving down
-            coord_.x += (coord_.y%2 == 0)?0:1;
-            coord_.y++;
-          }else{   //if moving to the sides
-            coord_.x++;
-          }
+          if(up)    //if moving up
+            move(coord_, UP_RIGHT);
+          else if(down) //if moving down
+            move(coord_, DOWN_RIGHT);
+          else   //if moving to the sides
+            move(coord_, SIDE_RIGHT);
+    }     
+   }
+   
+  //Is Within Bounds
+  boolean isValidField(Coord coord) {return (coord.x<=maxright && coord.x>=0 && coord.y<=maxbottom && coord.y>=0)? true:false;}
+   
+  //Move in any of the six possible directons
+
+  void move(Coord coord_, int move_type){
+    switch(move_type){
+      case UP_RIGHT:
+        coord_.x += (coord_.y%2 == 0)?0:1;
+        coord_.y--;
+        break;
+      case UP_LEFT:
+        coord_.x -= (coord_.y%2 == 0)?1:0;
+        coord_.y--;
+        break;
+      case DOWN_LEFT:
+        coord_.x -= (coord_.y%2 == 0)?1:0;
+        coord_.y++;
+        break;
+      case DOWN_RIGHT:
+        coord_.x += (coord_.y%2 == 0)?0:1;
+        coord_.y++;
+        break;
+      case SIDE_RIGHT:
+        coord_.x++;
+        break;
+      case SIDE_LEFT:
+        coord_.x--;
+        break;
     }
   }
-  
 }
