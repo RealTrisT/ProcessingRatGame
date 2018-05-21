@@ -33,7 +33,7 @@ class PathFinding{
       possible_pos[movement.DOWN_LEFT]  = sumDirectionDensity(pos,movement.DOWN_LEFT);
       possible_pos[movement.DOWN_RIGHT] = sumDirectionDensity(pos,movement.DOWN_RIGHT);
       
-
+      
       //check if direction is't blocked
       while(true)
       {
@@ -105,7 +105,7 @@ class PathFinding{
     for(int x = 0; x<= movement.maxright;x++)
       for(int y = 0; y<= movement.maxbottom;y++)
       {
-        density[x][y] += 1/(functionCalculation(x,y,x1,y1));
+        density[x][y] += 1/(functionCalculation(x,y,x1,y1)+0.5);
       }
     
   }

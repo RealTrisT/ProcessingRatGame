@@ -12,7 +12,7 @@ class Player{
     movement.maxtop    = ymin_;
     movement.maxbottom = ymax_;
     
-    path.resetAllDensity();  //this is needed because the matrix created for density
+    path.resetAllDensity();  //this is needed because the matrix density needs to be allocated
   }; 
     
   void walkingUpdateState(char key_, boolean released_){
@@ -34,7 +34,7 @@ class Player{
   Coord moveNextLocation(){
     int positionToMove;
     Coord oldCoord = new Coord(coord);    
-    positionToMove = path.getNextPosition(coord);   
+    positionToMove = path.getNextPosition(coord); 
     
     if(positionToMove == movement.NONE){      //game won    
      isWinner = true;
