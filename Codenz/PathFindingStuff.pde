@@ -1,15 +1,27 @@
+//this is the most basic algorithm, it starts by setting all the hexagonals density to 1
+
+//Then there are 2 options:
+
+//1:
+//Sets the density of the blocked hexagonals to a constant BLOCKED_DENSITY.
+//And sum the constant, SIDE_BLOCKED_DENSITY, to all 6 hexagonals at the sides of the blocked one.
+
+//2:
+//Sum kind of a gradient density, starting on the blocked Hexagonal and decreasing over distance to the original distance
+
+
+//Finally, it will move to the hexagonal in wich, the sum of the path in a straight line until the end of the board, is shorter
+
+
+
 class PathFinding{
   public PathFinding(HexagonMovement movement_){
       movement = movement_;     
   }
   
-  //this is the most basic algorithm, it starts by setting all the hexagonals density to 1
-  //then sets the density of the blocked hexagonals to a constant BLOCKED_DENSITY.
-  //And sum the constant, SIDE_BLOCKED_DENSITY, to all 6 hexagonals at the sides of the blocked one.
-  //Finally, it will move to the hexagonal in wich, the sum of the path in a straight line until the end of the board, is shorter
-  
+//move to the hexagonal in wich, the sum of the path in a straight line until the end of the board, is shorter
   public int getNextPosition(Coord pos){  
-      int possible_pos[] = new int[6];
+      float possible_pos[] = new float[6];
       int dir            = -1;                        //For return
       Coord temp         = new Coord(pos);            //Buffer for test if Hex is locked
       
@@ -38,17 +50,17 @@ class PathFinding{
       return dir;
   }
   
-  public void resetAllDensity()                                                   //Initialize all hexes to the default density
+  public void resetAllDensity()                                                  //Initialize all hexes to the default density
   {
-    density = new int[movement.maxright+1][movement.maxbottom+1];                 //Only needed in case of there is a reset on the size of field
+    density = new float[movement.maxright+1][movement.maxbottom+1];              //Only needed in case of there is a reset on the size of field
     
     for (int x = 0; x <= movement.maxright; x++)
         for (int y = 0; y <= movement.maxbottom; y++)
             density[x][y] = DEFAULT_DENSITY;
   }
   
-  //need to be called every time there is a valid click
-  public void setDensityBlockHex(int x, int y){
+  //Set density arround block (1ST GENERATION)
+  public void setDensityArround(int x, int y){
     Coord temp = new Coord(x,y);
     density[x][y] = BLOCKED_DENSITY;
     
@@ -62,8 +74,8 @@ class PathFinding{
   }
   
   //Sum all hexs in 1 directions until reach the boarder
-  private int sumDirectionDensity(Coord pos,int move_type){
-    int result = 0;
+  private float sumDirectionDensity(Coord pos,int move_type){
+    float result = 0;
     Coord temp = new Coord(pos);
     
     movement.move(temp,move_type);            //do not sum the density of the hex player
@@ -75,9 +87,9 @@ class PathFinding{
   }
   
   //index of Lowest number BIGGER THEN -1 in int array
-  private int LowestPositiveIndex(int [] arr1,int size){  
+  private int LowestPositiveIndex(float [] arr1,int size){  
     int index = movement.NONE;
-    int min = 1000000;
+    float min = 1000000;
     for (int i=0; i<size; i++){
         if (arr1[i] < min && arr1[i] >movement.NONE){
             min = arr1[i];
@@ -86,13 +98,30 @@ class PathFinding{
     }
     return index ;
   }
+  
+  //Set a gradient density starting on the blocked Hexagonal (2ND GENERATION)
+  //Use the function f(x,y) = (x-x1)^2 + (y-y1)^2 and then do 1/(f(x,y)) to create a vector gradient arround the map
+  public void setGradientDensity(int x1, int y1){
+    for(int x = 0; x<= movement.maxright;x++)
+      for(int y = 0; y<= movement.maxbottom;y++)
+      {
+        density[x][y] += 1/(functionCalculation(x,y,x1,y1));
+      }
+    
+  }
+  
+  private float functionCalculation(int x, int y,int x1, int y1){
+        return ((float)Math.pow((x-x1),2.0) + (float)Math.pow((y-y1),2.0));
+  }
+  
  
-  //constants for desity, this will influence the "bot"
-  //need to be optimized
-  private final int BLOCKED_DENSITY = 5;
-  private final int SIDE_BLOCKED_DENSITY = 3;
-  private final int DEFAULT_DENSITY = 1;
+  //only influence in 1st gen
+  private final float BLOCKED_DENSITY = 5;
+  private final float SIDE_BLOCKED_DENSITY = 3;
+  
+  //1st and 2nd generation
+  private final float DEFAULT_DENSITY = 1;
   
   private HexagonMovement movement;
-  private int density[][];
+  private float density[][];
 }

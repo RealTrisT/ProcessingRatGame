@@ -49,7 +49,9 @@ void mouseClicked(){
     return;
   if(hover.valid_both() && !hover.equals(player.coord)){
     //SET DENSITY
-    player.path.setDensityBlockHex(hover.x, hover.y);
+    //player.path.setDensityArround(hover.x, hover.y);  //(1st generation)
+    player.path.setGradientDensity(hover.x, hover.y);   //(2nd generation)
+    
     
     //Draw Clicked
     pf.markedHexagons[hover.x][hover.y] ^= pf.HEX_BLOCKED;
