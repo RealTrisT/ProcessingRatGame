@@ -139,7 +139,7 @@ void mouseMoved() {
     gameMouseMoved();    
   }else if(gameState == GAMESTATE_START){
     mainMenu.render(int(mouseX), int(mouseY));
-  }else if(gameState == GAMESTATE_ENDED){
+  }else if(gameState == GAMESTATE_ENDED && !npc.canMove){
     endMenu.render(int(mouseX), int(mouseY));
   }
 }
