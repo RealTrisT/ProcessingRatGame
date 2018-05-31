@@ -3,7 +3,6 @@ final int mapHeight = 11;     //height in hexagons
 final int mapHexRadius = 25;  //radius of the hexagons
 final int mapXOffs = 50;      //map offset from left window border
 final int mapYOffs = 50;      //map offset from top window border
-final int numBlockHex = 5;    //number of blocked hexs at start
         
 //                 make up for map offsets            width of each cell      width in cells, -0.5 because of the half one in the end
 //                           v                                  v                            v
@@ -23,23 +22,6 @@ PlayingField pf;
 Player npc;
 Coord hover;
 
-
-void setInitialBlocks(){                                //Set some randomBlocks at start
-  Coord randomHex = new Coord();
-  randomHex.x = (int)random(mapWidth);
-  randomHex.y = (int)random(mapHeight);
-  
-  for(int i = 0;i<numBlockHex;i++){
-    do{
-      randomHex.x = (int)random(mapWidth);
-      randomHex.y = (int)random(mapHeight);
-    }while(randomHex.equals(npc.coord));
-    pf.markedHexagons[randomHex.x][randomHex.y] ^= pf.HEX_BLOCKED;
-    pf.drawSingle(randomHex.x, randomHex.y);
-    npc.path.setGradientDensity(randomHex.x, randomHex.y);
-  } 
-}
-
 void setup() {
   mainMenu = new MainMenu(myWidth, myHeight);
   hover    = new Coord();
@@ -47,21 +29,7 @@ void setup() {
   npc      = new Player();
   npc.walkingSetBorders(0, 0, mapWidth-1, mapHeight-1);
 
-<<<<<<< HEAD
   mainMenu.firstRender();
-=======
-  npc.coord.x = mapWidth/2;
-  npc.coord.y = mapHeight/2;
-
-  background(0);
-  fill(color(255, 255, 255));
-  pf.map.drawAll();
-  pf.markedHexagons[npc.coord.x][npc.coord.y] |= pf.HEX_PLAYERD;
-  pf.drawSingle(npc.coord.x, npc.coord.y);
-  
-  setInitialBlocks();
-  //mainMenu.firstRender();
->>>>>>> da2dce8b6ecf2c0ea489ab367887684a7c708b0b
 }
 
 void settings() {
