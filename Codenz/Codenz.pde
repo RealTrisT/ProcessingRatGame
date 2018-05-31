@@ -47,21 +47,7 @@ void setup() {
   npc      = new Player();
   npc.walkingSetBorders(0, 0, mapWidth-1, mapHeight-1);
 
-<<<<<<< HEAD
   mainMenu.firstRender();
-=======
-  npc.coord.x = mapWidth/2;
-  npc.coord.y = mapHeight/2;
-
-  background(0);
-  fill(color(255, 255, 255));
-  pf.map.drawAll();
-  pf.markedHexagons[npc.coord.x][npc.coord.y] |= pf.HEX_PLAYERD;
-  pf.drawSingle(npc.coord.x, npc.coord.y);
-  
-  setInitialBlocks();
-  //mainMenu.firstRender();
->>>>>>> da2dce8b6ecf2c0ea489ab367887684a7c708b0b
 }
 
 void settings() {
@@ -80,6 +66,7 @@ void startPlaying(){
   pf.map.drawAll();
   pf.markedHexagons[npc.coord.x][npc.coord.y] |= pf.HEX_PLAYERD;
   pf.drawSingle(npc.coord.x, npc.coord.y);
+  setInitialBlocks();
   
   gameState = GAMESTATE_PLAYN;
 }
