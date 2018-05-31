@@ -8,7 +8,7 @@ class StartMenu{
   
   public void firstRender(){
     background(bgColor);
-    startButton.renderme(false);
+    render(-1, -1);
   }
   
   public void render(int mousex, int mousey){

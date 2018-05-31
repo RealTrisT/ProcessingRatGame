@@ -7,13 +7,8 @@ class EndMenu{
     bgColor = color(64, 64, 64);
   }
   
-  public void firstRender(){
-    background(bgColor);
-    restartButton.renderme(false);
-    exitButton.renderme(false);
-  }
-  
   public void render(int mousex, int mousey){
+    background(bgColor);
     restartButton.renderme(restartButton.isLocMe(mousex, mousey));
     exitButton.renderme(exitButton.isLocMe(mousex, mousey));
   }

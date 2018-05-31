@@ -113,7 +113,7 @@ void gameMouseClicked(){
     if (npc.isWinner()) {
       gameState = GAMESTATE_ENDED;
       endMenu.Victory = true;
-      endMenu.firstRender();
+      endMenu.render(int(mouseX), int(mouseY));
       npc.canMove = false;
       return;
     }
@@ -152,7 +152,7 @@ void mouseClicked(){
   }else if(gameState == GAMESTATE_ENDED){
     if(npc.canMove){
       npc.canMove = false;
-      endMenu.firstRender();
+      endMenu.render(int(mouseX), int(mouseY));
     }else{
       endMenu.clicko(int(mouseX), int(mouseY));
     }
