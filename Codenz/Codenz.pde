@@ -12,6 +12,11 @@ final int myWidth  = int(mapXOffs*2  +  hexagonShortDiagonal((float)mapHexRadius
 //                           v                          v                                    v
 final int myHeight = int(mapYOffs*2  +  (mapHexRadius*2)*(mapHeight/2)  +  (mapHexRadius)*((mapHeight-1)/2));  //height of the window
 
+final char GAMESTATE_START = 0;
+final char GAMESTATE_PLAYN = 1;
+final char GAMESTATE_ENDED = 2;
+char gameState = 0;
+
 MainMenu mainMenu;
 PlayingField pf;
 Player npc;
@@ -23,17 +28,8 @@ void setup() {
   pf       = new PlayingField(mapWidth, mapHeight, mapXOffs, mapYOffs, mapHexRadius);
   npc      = new Player();
   npc.walkingSetBorders(0, 0, mapWidth-1, mapHeight-1);
-  npc.canMove = true;
 
-  npc.coord.x = mapWidth/2;
-  npc.coord.y = mapHeight/2;
-
-  background(0);
-  fill(color(255, 255, 255));
-  pf.map.drawAll();
-  pf.markedHexagons[npc.coord.x][npc.coord.y] |= pf.HEX_PLAYERD;
-  pf.drawSingle(npc.coord.x, npc.coord.y);
-  //mainMenu.firstRender();
+  mainMenu.firstRender();
 }
 
 void settings() {
@@ -43,7 +39,20 @@ void settings() {
 void draw() {  //called every frame
 }
 
-void mouseMoved() {
+void startPlaying(){
+  npc.canMove = true;
+  npc.coord.x = mapWidth/2;
+  npc.coord.y = mapHeight/2;
+  background(0);
+  fill(color(255, 255, 255));
+  pf.map.drawAll();
+  pf.markedHexagons[npc.coord.x][npc.coord.y] |= pf.HEX_PLAYERD;
+  pf.drawSingle(npc.coord.x, npc.coord.y);
+  
+  gameState = GAMESTATE_PLAYN;
+}
+
+void gameMouseMoved(){
   Coord old = new Coord(hover);
   hover.set(pf.map.coords(mouseX, mouseY));
   if (!old.equals(hover)) {
@@ -56,10 +65,9 @@ void mouseMoved() {
       pf.drawSingle(hover.x, hover.y);
     }
   }
-  //mainMenu.render(int(mouseX), int(mouseY));
 }
 
-void mouseClicked() {
+void gameMouseClicked(){
   if (!npc.canMove)
     return;
   if (hover.valid_both() && !hover.equals(npc.coord)) {
@@ -88,6 +96,24 @@ void mouseClicked() {
 
     if (npc.isLoser())
       npc.canMove = false;
+  }
+}
+
+void mouseMoved() {
+  if(gameState == GAMESTATE_PLAYN){
+    gameMouseMoved();    
+  }else if(gameState == GAMESTATE_START){
+    mainMenu.render(int(mouseX), int(mouseY));
+  }else if(gameState == GAMESTATE_ENDED){
+  }
+}
+
+void mouseClicked(){
+  if(gameState == GAMESTATE_PLAYN){
+    gameMouseClicked();
+  }else if(gameState == GAMESTATE_START){
+    mainMenu.clicko(int(mouseX), int(mouseY));
+  }else if(gameState == GAMESTATE_ENDED){
   }
 }
 

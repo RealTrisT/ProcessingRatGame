@@ -44,6 +44,10 @@ class MainMenu{
     startButton.renderme(startButton.isLocMe(mousex, mousey));
   }
   
+  public void clicko(int mousex, int mousey){
+    if(startButton.isLocMe(mousex, mousey))startPlaying();
+  }
+  
   Button startButton;
   color bgColor;
   int scrWidth, scrHeight;
