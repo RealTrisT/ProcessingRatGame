@@ -10,14 +10,17 @@ class EndMenu{
   public void firstRender(){
     background(bgColor);
     restartButton.renderme(false);
+    exitButton.renderme(false);
   }
   
   public void render(int mousex, int mousey){
     restartButton.renderme(restartButton.isLocMe(mousex, mousey));
+    exitButton.renderme(exitButton.isLocMe(mousex, mousey));
   }
   
   public void clicko(int mousex, int mousey){
     if(restartButton.isLocMe(mousex, mousey))startPlaying();
+    else if(exitButton.isLocMe(mousex, mousey))exit();
   }
   
   boolean Victory;

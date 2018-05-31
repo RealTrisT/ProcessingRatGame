@@ -19,6 +19,7 @@ final char GAMESTATE_ENDED = 2;
 char gameState = 0;
 
 StartMenu mainMenu;
+EndMenu endMenu;
 PlayingField pf;
 Player npc;
 Coord hover;
@@ -57,6 +58,7 @@ void restartGame(){
 }
 
 void setup() {
+  endMenu  = new EndMenu(myWidth, myHeight);
   mainMenu = new StartMenu(myWidth, myHeight);
   hover    = new Coord();
   pf       = new PlayingField(mapWidth, mapHeight, mapXOffs, mapYOffs, mapHexRadius);
@@ -118,6 +120,9 @@ void gameMouseClicked(){
 
     Coord olderPos = npc.moveNextLocation();                      //return older location
     if (npc.isWinner()) {
+      gameState = GAMESTATE_ENDED;
+      endMenu.Victory = true;
+      endMenu.firstRender();
       npc.canMove = false;
       return;
     }
@@ -129,8 +134,12 @@ void gameMouseClicked(){
     pf.markedHexagons[olderPos.x][olderPos.y] &= ~pf.HEX_PLAYERD;
     pf.drawSingle(olderPos.x, olderPos.y);
 
-    if (npc.isLoser())
+    if (npc.isLoser()){
+      gameState = GAMESTATE_ENDED;
+      endMenu.Victory = false;
+      endMenu.firstRender();
       npc.canMove = false;
+    }
   }
 }
 
@@ -140,6 +149,7 @@ void mouseMoved() {
   }else if(gameState == GAMESTATE_START){
     mainMenu.render(int(mouseX), int(mouseY));
   }else if(gameState == GAMESTATE_ENDED){
+    endMenu.render(int(mouseX), int(mouseY));
   }
 }
 
@@ -149,6 +159,7 @@ void mouseClicked(){
   }else if(gameState == GAMESTATE_START){
     mainMenu.clicko(int(mouseX), int(mouseY));
   }else if(gameState == GAMESTATE_ENDED){
+    endMenu.clicko(int(mouseX), int(mouseY));
   }
 }
 
