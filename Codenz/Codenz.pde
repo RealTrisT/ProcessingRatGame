@@ -76,16 +76,7 @@ void draw() {  //called every frame
 }
 
 void startPlaying(){
-  npc.canMove = true;
-  npc.coord.x = mapWidth/2;
-  npc.coord.y = mapHeight/2;
-  background(0);
-  fill(color(255, 255, 255));
-  pf.map.drawAll();
-  pf.markedHexagons[npc.coord.x][npc.coord.y] |= pf.HEX_PLAYERD;
-  pf.drawSingle(npc.coord.x, npc.coord.y);
-  setInitialBlocks();
-  
+  restartGame();
   gameState = GAMESTATE_PLAYN;
 }
 
@@ -137,8 +128,8 @@ void gameMouseClicked(){
     if (npc.isLoser()){
       gameState = GAMESTATE_ENDED;
       endMenu.Victory = false;
-      endMenu.firstRender();
-      npc.canMove = false;
+      //endMenu.firstRender();      //this is instead done in the mouseclicked event, so we can only start rendering in the click after 
+      //npc.canMove = false;        // the player's lost
     }
   }
 }
@@ -159,7 +150,12 @@ void mouseClicked(){
   }else if(gameState == GAMESTATE_START){
     mainMenu.clicko(int(mouseX), int(mouseY));
   }else if(gameState == GAMESTATE_ENDED){
-    endMenu.clicko(int(mouseX), int(mouseY));
+    if(npc.canMove){
+      npc.canMove = false;
+      endMenu.firstRender();
+    }else{
+      endMenu.clicko(int(mouseX), int(mouseY));
+    }
   }
 }
 
