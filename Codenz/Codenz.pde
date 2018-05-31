@@ -107,14 +107,14 @@ void gameMouseMoved(){
 void gameMouseClicked(){
   if (!npc.canMove)
     return;
-  if (hover.valid_both() && !hover.equals(npc.coord)) {
+  if (hover.valid_both() && !hover.equals(npc.coord) && ((pf.markedHexagons[hover.x][hover.y])&(pf.HEX_BLOCKED)) == 0) {
     //SET DENSITY
     //npc.path.setDensityArround(hover.x, hover.y);  //(1st generation)
     npc.path.setGradientDensity(hover.x, hover.y);   //(2nd generation)
 
 
     //Draw Clicked
-    pf.markedHexagons[hover.x][hover.y] ^= pf.HEX_BLOCKED;
+    pf.markedHexagons[hover.x][hover.y] |= pf.HEX_BLOCKED;
     pf.drawSingle(hover.x, hover.y);
 
 
@@ -162,7 +162,7 @@ void mouseClicked(){
     endMenu.clicko(int(mouseX), int(mouseY));
   }
 }
-
+/*
 void keyPressed() {
   npc.walkingUpdateState(key, false);
   if(key=='r')                            //to remove later
@@ -182,4 +182,4 @@ void keyPressed() {
 
 void keyReleased() {
   npc.walkingUpdateState(key, true);
-}
+}*/
