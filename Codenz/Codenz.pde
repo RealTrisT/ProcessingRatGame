@@ -18,7 +18,7 @@ final char GAMESTATE_PLAYN = 1;
 final char GAMESTATE_ENDED = 2;
 char gameState = 0;
 
-MainMenu mainMenu;
+StartMenu mainMenu;
 PlayingField pf;
 Player npc;
 Coord hover;
@@ -57,7 +57,7 @@ void restartGame(){
 }
 
 void setup() {
-  mainMenu = new MainMenu(myWidth, myHeight);
+  mainMenu = new StartMenu(myWidth, myHeight);
   hover    = new Coord();
   pf       = new PlayingField(mapWidth, mapHeight, mapXOffs, mapYOffs, mapHexRadius);
   npc      = new Player();
