@@ -40,6 +40,22 @@ void setInitialBlocks(){                                //Set some randomBlocks 
   } 
 }
 
+void restartGame(){
+  for(int x= 0; x<mapWidth;x++){
+     for(int y= 0; y<mapHeight;y++){
+       pf.markedHexagons[x][y] = 0;
+       pf.drawSingle(x,y);
+     }
+  }
+  npc.restart();
+  
+  pf.markedHexagons[npc.coord.x][npc.coord.y] |= pf.HEX_PLAYERD;
+  pf.drawSingle(npc.coord.x, npc.coord.y);
+  
+  setInitialBlocks();
+  
+}
+
 void setup() {
   mainMenu = new MainMenu(myWidth, myHeight);
   hover    = new Coord();
@@ -138,6 +154,9 @@ void mouseClicked(){
 
 void keyPressed() {
   npc.walkingUpdateState(key, false);
+  if(key=='r')                            //to remove later
+    restartGame();
+    
   Coord nextStp = npc.walkingGetNextLocation();
   if ((pf.markedHexagons[nextStp.x][nextStp.y]&pf.HEX_BLOCKED) == 0) {
     if (!nextStp.equals(npc.coord)) {

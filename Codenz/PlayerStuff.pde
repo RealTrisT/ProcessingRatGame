@@ -54,6 +54,14 @@ class Player{
   
   boolean isWinner()  {return isWinner;};
   
+  void restart(){    //Restart density and player position
+    path.resetAllDensity();
+    isWinner = false;
+    coord.x = mapWidth/2;
+    coord.y = mapHeight/2;
+    canMove = true;
+  }
+  
   HexagonMovement movement;
   PathFinding path;
   boolean canMove;
